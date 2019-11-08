@@ -1,9 +1,4 @@
-function getRandomIntInclusive(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
-}
-
+//Declaração das variáveis:
 var aleatorio,
   elRand,
   palavra,
@@ -11,6 +6,8 @@ var aleatorio,
   str,
   quantErros = 0,
   acertos = 0,
+  dica = "",
+  nomeDaCategoria = "",
   erros = [];
 
 const CAMINHO = "/assets/images/";
@@ -20,19 +17,68 @@ const texto = document.getElementById("get-linhas");
 const elEntradaLetra = document.getElementById("letra");
 const btnIniciarNovamente = document.getElementById("btn-iniciar-novamente");
 
-var palavras = [
-  "casa",
-  "deus",
-  "computador",
-  "mouse",
-  "grampeador",
-  "paralelepipedo",
-];
+/**
+ Banco de dados:
+*/
+
+const db = {
+  frutas: [
+    { palavra: "manga", dica: "Há épocas em que tem bastante" },
+    { palavra: "tangerina", dica: "Tem em todo lugar" },
+    { palavra: "banana", dica: "Tem em todo lugar" },
+    { palavra: "uva", dica: "Tem em todo lugar" },
+    { palavra: "pêssego", dica: "Tem em todo lugar" },
+    { palavra: "melancia", dica: "Tem em todo lugar" },
+    { palavra: "melão", dica: "Tem em todo lugar" },
+    { palavra: "carambola", dica: "Tem em todo lugar" },
+    { palavra: "morango", dica: "Tem em todo lugar" },
+    { palavra: "laranja", dica: "Tem em todo lugar" },
+    { palavra: "pitomba", dica: "Tem em todo lugar" }
+  ],
+  casa: [
+    { palavra: "mesa", dica: "Tem em todo lugar" },
+    { palavra: "cadeira", dica: "Tem em todo lugar" },
+    { palavra: "geladeira", dica: "Tem em todo lugar" },
+    { palavra: "rack", dica: "Tem em todo lugar" },
+    { palavra: "televisão", dica: "Tem em todo lugar" },
+    { palavra: "fogão", dica: "Tem em todo lugar" },
+    { palavra: "cama", dica: "Tem em todo lugar" },
+    { palavra: "travesseiro", dica: "Tem em todo lugar" },
+    { palavra: "guarda-roupa", dica: "Tem em todo lugar" },
+    { palavra: "tv", dica: "Tem em todo lugar" },
+    { palavra: "porta", dica: "Tem em todo lugar" },
+    { palavra: "janela", dica: "Tem em todo lugar" },
+    { palavra: "armário", dica: "Tem em todo lugar" },
+    { palavra: "sofá", dica: "Tem em todo lugar" },
+    { palavra: "dvd", dica: "Tem em todo lugar" },
+    { palavra: "som", dica: "Tem em todo lugar" },
+    { palavra: "controle-remoto", dica: "Tem em todo lugar" },
+    { palavra: "computador", dica: "Tem em todo lugar" }
+  ]
+};
+
+//Pega um valor aleatório no banco de dados.
 
 function iniciarJogo() {
-  aleatorio = getRandomIntInclusive(0, palavras.length - 1);
+  nomeDaCategoria = "frutas";
 
-  palavra = palavras[aleatorio];
+  //aleatorio = getRandomIntInclusive(0, palavras.length - 1);
+  var categoria = Object.values(db[nomeDaCategoria]);
+
+  categoria = categoria.sort((a, b) => {
+    return 0.5 - Math.random();
+  });
+
+  var rand = categoria[Math.floor(Math.random() * categoria.length)];
+
+  palavra = rand.palavra;
+
+  document.getElementById(
+    "get-name-category"
+  ).innerHTML = `<div class="dicas">Categoria: 
+  <strong>${nomeDaCategoria.toUpperCase()}</strong> <br>
+    Dica: <strong>${rand.dica}</strong></div>
+    `;
 
   elRand = palavra;
 
@@ -67,6 +113,7 @@ elEntradaLetra.onkeyup = ev => {
   var letra;
 
   if (ev.keyCode == 13) {
+
     letra = ev.target.value;
 
     var index = elRand.findIndex(lett => lett === letra);
@@ -99,7 +146,6 @@ elEntradaLetra.onkeyup = ev => {
         if (confirm("Você perdeu.\nDeseja iniciar um novo jogo?")) {
           iniciarJogo();
           restartJogo();
-          //button();
         } else {
           ev.target.disabled = true;
         }
@@ -112,11 +158,11 @@ elEntradaLetra.onkeyup = ev => {
 
         texto.innerHTML = str.join("").toUpperCase();
 
+        //Quando o usuário vence:
         if (acertos == palavra.length) {
           if (confirm("Você venceu.\nDeseja iniciar um novo jogo?")) {
             iniciarJogo();
             restartJogo();
-            //button();
           } else {
             ev.target.disabled = true;
           }

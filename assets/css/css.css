@@ -73,3 +73,13 @@ span {
   align-items: center;
   justify-content: center;
 }
+
+.dicas{
+  text-align: left;
+  font-size:2rem;
+  background:rgba(0, 0, 0, 0.4545);
+  width: 400px !important;
+  color:white;
+  padding:10px;
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.8545);
+}
